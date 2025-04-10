@@ -3,22 +3,28 @@ document.getElementById("formLogin").addEventListener('submit', function (e) {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
+    login(email,password)
+})
+
+function login(email, password) {
     let message = ''
     let alertType = ''
-
-    if (email === "" || password === "") {
-        alertType = 'warning'
-        message = 'Por favor completa todos los campos';
-    }
-    else if (email === 'admin@gmail.com' && password === 'admin123') {
-        alertType = 'success'
-        message = 'Inicio de sesion exitoso'
-    }
-    else {
-        alertType = 'danger'
-        message = 'Correo o contraseña incorrecto'
-    }
-
+    fetch("https://reqres.in/api/login", {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json"
+        }, body: JSON.stringify({ email, password }),
+    })
+        .then((data) => {
+            alertType = 'success'
+            message = 'Inicio de sesion exitoso'
+            console.log('responde bien' + data)
+        })
+        .catch((error) => {
+            alertType = 'danger'
+            message = 'Correo o contraseña incorrecto'
+            console.error(error)
+        })
     let alert = `
             <div class="alert alert-${alertType} alert-dismissible fade show" role="alert">
             ${message}
@@ -27,4 +33,4 @@ document.getElementById("formLogin").addEventListener('submit', function (e) {
         
         `;
     document.getElementById('alert').innerHTML = alert;
-})
+}
