@@ -120,3 +120,35 @@ function showModalProduct(product) {
     const modal = new bootstrap.Modal(document.getElementById('modalProduct'));
     modal.show();
 }
+
+
+function createProduct(productData) {
+    fetch("https://reqres.in/api/unknown/", {
+    method: "POST",
+    headers: {
+    "Content-type": "application/json",
+    'x-api-key': 'reqres-free-v1'
+    },
+    body: JSON.stringify(productData)
+    })
+    .then((result) => {
+            return result.json().then(
+                data => ({
+                    status: result.status,
+                    body: data
+                })
+            )
+        })
+    .then(response => {
+        if (response.status === 201) {
+            alert("Producto creado exitosamente!");
+      // Actualizar lista para mostrar el nuevo producto
+            getProducts();
+        } else {
+            alert("Error al crear el producto.");
+        }
+    })
+        .catch(error => {
+        alert("Error de conexión: " + error.message);
+    });
+}
